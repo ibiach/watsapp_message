@@ -1,0 +1,13 @@
+/*!**************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/postcss-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/index.css ***!
+  \**************************************************************************************************************************************************/
+@font-face {
+  font-family: "Oswald";
+  font-weight: 700;
+  src: url("https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap");
+}
+* {
+  font-family: "Oswald", sans-serif;
+}
+
+/*# sourceMappingURL=main.a68c8ab93e510b933740.css.map*/
