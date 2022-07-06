@@ -43,12 +43,16 @@ const App = () => {
 		return searchPhone.length >= 11 ? searchPhone : '8' + searchPhone
 	}
 
-	if (!text) setMessage({ text: localStorage.getItem('message') })
+	useEffect(() => {
+		if (!text) setMessage({ text: localStorage.getItem('message') })
 
-	const clientUrl = () => url(phone, name, text)
+		// return () => {
+		// 	second
+		// }
+	}, [message])
 
 	const handlerGoChat = () => {
-		window.location = clientUrl()
+		window.location = url(phone, name, text)
 	}
 
 	const handlerGetClientInfo = e => {
@@ -56,7 +60,7 @@ const App = () => {
 	}
 
 	const handlerGetClientMessage = e => {
-		setMessage({ text: encodeURIComponent(e.target.value) })
+		setMessage({ text: encodeURI(e.target.value) })
 	}
 
 	const handlerSetMessage = () => {
