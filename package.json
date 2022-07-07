@@ -37,6 +37,9 @@
 			"last 1 safari version"
 		]
 	},
+	"resolutions": {
+		"autoprefixer": "10.4.5"
+	},
 	"devDependencies": {
 		"@babel/cli": "^7.18.6",
 		"@babel/core": "^7.18.6",

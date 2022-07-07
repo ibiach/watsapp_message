@@ -41,6 +41,8 @@ const App = () => {
 		return searchPhone.length >= 11 ? searchPhone : '8' + searchPhone
 	}
 
+	const isShownMessage = () => (boxMessage.show ? '' : 'hide')
+
 	const handlerShowMessage = () => (show ? showBoxMessage({ show: false }) : showBoxMessage({ show: true }))
 
 	const handlerGetClientInfo = e => setClientInfo(e.target.value)
@@ -48,14 +50,14 @@ const App = () => {
 	const handlerGetClientMessage = e => setMessage(e.target.value)
 
 	const handlerSetMessage = () => {
-		localStorage.setItem('message', message)
+		localStorage.setItem('message', encodeURI(message))
 		setMessage('')
 	}
 
 	const handlerGoChat = () => {
 		const normalizeNameClient = normalizeName(clientInfo)
 		const normalizePhoneClient = normalizePhone(clientInfo)
-		const encodeMessage = encodeURI(message) ? encodeURI : localStorage.getItem('message')
+		const encodeMessage = encodeURI(message) ? encodeURI(message) : localStorage.getItem('message')
 
 		setClientInfo('')
 
@@ -74,7 +76,7 @@ const App = () => {
 				/>
 			</Form.Group>
 
-			<Form.Group className={`mb-3 ${boxMessage.show ? '' : 'hide'}`}>
+			<Form.Group className={`mb-3 ${isShownMessage()}`}>
 				<Form.Label>Текст сообщения</Form.Label>
 				<Form.Control
 					onChange={handlerGetClientMessage}
@@ -101,7 +103,7 @@ const App = () => {
 				</Button>
 				<Button
 					onClick={handlerSetMessage}
-					className={boxMessage.show ? '' : 'hide'}
+					className={isShownMessage()}
 					style={{
 						maxWidth: '350px',
 						width: '100%',
