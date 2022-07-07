@@ -14,17 +14,15 @@ const ButtonsText = styled.div`
 	flex-direction: row;
 	margin-bottom: 10px;
 `
-const url = (phone, name, message) =>
+const url = (name, phone, message) =>
 	`https://api.whatsapp.com/send/?phone=${phone}&text=${name}${message}&app&apsent=0`
 
 const App = () => {
 	const [boxMessage, showBoxMessage] = useState({ show: false })
-	const [clientInfo, setClientInfo] = useState({ name: '', phone: '' })
-	const [message, setMessage] = useState({ text: '' })
+	const [clientInfo, setClientInfo] = useState('')
+	const [message, setMessage] = useState('')
 
-	const { name, phone } = clientInfo
 	const { show } = boxMessage
-	const { text } = message
 
 	const normalizeName = name => {
 		const regexpChars = /([а-яё]+|[a-z]+)/gi
@@ -43,45 +41,44 @@ const App = () => {
 		return searchPhone.length >= 11 ? searchPhone : '8' + searchPhone
 	}
 
-	useEffect(() => {
-		if (!text) setMessage({ text: localStorage.getItem('message') })
+	const handlerShowMessage = () => (show ? showBoxMessage({ show: false }) : showBoxMessage({ show: true }))
 
-		// return () => {
-		// 	second
-		// }
-	}, [message])
+	const handlerGetClientInfo = e => setClientInfo(e.target.value)
 
-	const handlerGoChat = () => {
-		window.location = url(phone, name, text)
-	}
-
-	const handlerGetClientInfo = e => {
-		setClientInfo({ name: normalizeName(e.target.value), phone: normalizePhone(e.target.value) })
-	}
-
-	const handlerGetClientMessage = e => {
-		setMessage({ text: encodeURI(e.target.value) })
-	}
+	const handlerGetClientMessage = e => setMessage(e.target.value)
 
 	const handlerSetMessage = () => {
-		setMessage({ text: localStorage.setItem('message', text) })
+		localStorage.setItem('message', message)
+		setMessage('')
 	}
 
-	const handlerShowMessage = () => {
-		show ? showBoxMessage({ show: false }) : showBoxMessage({ show: true })
+	const handlerGoChat = () => {
+		const normalizeNameClient = normalizeName(clientInfo)
+		const normalizePhoneClient = normalizePhone(clientInfo)
+		const encodeMessage = encodeURI(message) ? encodeURI : localStorage.getItem('message')
+
+		setClientInfo('')
+
+		window.location = url(normalizeNameClient, normalizePhoneClient, encodeMessage)
 	}
 
 	return (
 		<FormStyled>
 			<Form.Group className='mb-3'>
-				<Form.Label>Данные клиента</Form.Label>
-				<Form.Control onChange={handlerGetClientInfo} type='text' placeholder='Введите имя и телефон' />
+				<Form.Label>Данные клиента </Form.Label>
+				<Form.Control
+					onChange={handlerGetClientInfo}
+					value={clientInfo}
+					type='text'
+					placeholder='Введите имя и телефон'
+				/>
 			</Form.Group>
 
 			<Form.Group className={`mb-3 ${boxMessage.show ? '' : 'hide'}`}>
 				<Form.Label>Текст сообщения</Form.Label>
 				<Form.Control
 					onChange={handlerGetClientMessage}
+					value={message}
 					as='textarea'
 					placeholder='Введите сообщение'
 					style={{ height: '100px' }}
